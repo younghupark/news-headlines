@@ -6,13 +6,19 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
   </head>
   <body>
-    <h2> <%= source %> </h2>
-    <% if(response !== null){ %>
-      <% for( var i=0; i < response.length; i++) { %>
-           <p>
-                <%= response[i].title %>
-          </p>
+    <% for(var i = 0; i < sources.length; i++) { %>
+      <div class = "news-source">
+      <h2> <%= sources[i].articles[0].source.name %> </h2>
+      <% if(sources[i].articles !== null){ %>
+        <% for( var j=0; j < sources[i].articles.length; j++) { %>
+             <p>
+                  <%= sources[i].articles[j].title %>
+            </p>
+
+            <% } %>
+        <% } %>
+        </div>
       <% } %>
-              <% } %>
+
   </body>
 </html>

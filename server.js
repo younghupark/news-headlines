@@ -3,14 +3,21 @@ const app = express
 const request = require('request')
 const config = require('config')
 
+
 const apiKey= config.get('apiKey');
 
+const NewsAPI = require('newsapi')
+const newsapi = new NewsAPI(apiKey);
+
+const baseUrl = 'https://newsapi.org/v2/top-headlines?'
 app.set('view engine', 'ejs')
 
-app.get('/', function (req, res) {
-  var url = 'https://newsapi.org/v2/top-headlines?' +
-           'sources=the-new-york-times&' +
-          'apiKey=' + apiKey;
+var source = "the-new-york-times"
+/*
+function getHeadlines(res, source) {
+  var url =  baseUrl +
+           'sources=' + source +
+          '&apiKey=' + apiKey;
 request(url, function (err, response, body) {
     if(err){
       console.log('stuff')
@@ -25,7 +32,34 @@ request(url, function (err, response, body) {
       }
     }
   });
-})
+
+}
+*/
+
+function getArticles(source) {
+  return newsapi.v2.topHeadlines({sources: source,source}).then(response => {
+    return response;
+});
+}
+app.get('/', function (req, res) {
+  var articles = []
+  var nytimes = getArticles("the-new-york-times")
+  var wsj = getArticles("the-wall-street-journal")
+
+  Promise.all([nytimes, wsj]).then(function(values) {
+    res.render('index', {sources: values});
+
+  })
+
+
+  /*var other = getArticles("the-new-york-times").then(results => {
+    res.render('index', {source2: results.articles[0].source.name, response2: results.articles});
+  })
+  var same = getArticles("the-new-york-times").then(results => {
+    res.render('index', {source3: results.articles[0].source.name, response3: results.articles});
+  })
+  */
+});
 
 
 app.listen(3000, function () {
