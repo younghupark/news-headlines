@@ -7,7 +7,7 @@
   </head>
   <body>
     <% for(var i = 0; i < sources.length; i++) { %>
-      <div class = "news-source">
+      <div class = "news-source" id="source_<%=i %>">
       <h2> <%= sources[i].articles[0].source.name %> </h2>
       <% if(sources[i].articles !== null){ %>
         <% for( var j=0; j < sources[i].articles.length; j++) { %>
